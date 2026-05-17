@@ -297,7 +297,7 @@ function renderSkills(skills) {
 
 function renderProjects(projects) {
   document.getElementById('projects-list').innerHTML = projects.map((p, i) => `
-    <div class="project-card" style="display:grid;grid-template-columns:1fr auto;">
+    <a class="project-card" style="display:grid;grid-template-columns:1fr auto;">
       <div>
         <p class="project-num">0${i+1}</p>
         <p class="project-name">${p.name}</p>
@@ -305,7 +305,7 @@ function renderProjects(projects) {
         <div class="project-tags">${(p.tags||[]).map(t=>`<span class="project-tag">${t}</span>`).join('')}</div>
       </div>
       <span class="project-status s-${p.status}">${p.status}</span>
-    </div>`).join('');
+    </a>`).join('');
 }
 
 function renderLiveStats(lc, projCount) {
