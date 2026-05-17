@@ -321,7 +321,10 @@ function renderSkills(skills) {
   skills.forEach(s => { if (!groups[s.category]) groups[s.category] = []; groups[s.category].push(s); });
   document.getElementById('skills-list').innerHTML = Object.entries(groups).map(([cat, items]) => `
     <div style="margin-bottom:1.5rem;">
-      <p style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">${cat}</p>
+      <p style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;display:flex;justify-content:space-between;align-items:center;">
+        ${cat}
+        <button class="card-btn" onclick="quickAdd('${cat}')" style="font-size:0.68rem;padding:2px 8px;">+ Add</button>
+      </p>
       ${items.map(s => `
         <div class="card">
           <div class="card-info">
@@ -475,6 +478,13 @@ async function deleteProblem(id) {
   problemsData = problemsData.filter(x => x.id !== id);
   renderProblems(problemsData);
   showToast('Problem deleted');
+}
+
+function quickAdd(category){
+  document.getElementById('sk-cat').value = category;
+  document.getElementById('sk-name').focus();
+  document.getElementById('panel-skills').scrollTop = 0;
+  window.scrollTo(0,0);
 }
 
 // ── TOAST ────────────────────────────────────────────────
