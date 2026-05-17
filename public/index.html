@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vidushi Singh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #faf9f6; --ink: #1a1916; --muted: #7a7770;
+  --accent: #b5601a; --border: rgba(26,25,22,0.1); --card-bg: #f3f1ec;
+  --easy: #2d7a4e; --medium: #b5601a; --hard: #9b2525;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.7; cursor: none; }
+.cursor { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+.cursor-ring { width: 28px; height: 28px; border: 1px solid var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.15s ease; opacity: 0.4; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.2rem 6vw; display: flex; justify-content: space-between; align-items: center; background: rgba(250,249,246,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 0.78rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink); }
+@keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+#hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 10rem 6vw 6rem; max-width: 960px; margin: 0 auto; }
+.hero-eyebrow { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.4rem; opacity: 0; animation: fadeUp 0.7s 0.15s forwards; }
+.hero-name { font-family: 'DM Serif Display', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); line-height: 1.05; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.7s 0.3s forwards; }
+.hero-name em { font-style: italic; color: var(--accent); }
+.hero-bio { font-size: 1.05rem; color: var(--muted); max-width: 500px; line-height: 1.85; margin-bottom: 2.5rem; font-weight: 300; opacity: 0; animation: fadeUp 0.7s 0.5s forwards; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.7s 0.65s forwards; }
+.chip { font-size: 0.78rem; padding: 5px 13px; border: 1px solid var(--border); border-radius: 99px; color: var(--muted); }
+.hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s 0.8s forwards; }
+.btn { display: inline-block; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; padding: 10px 22px; border-radius: 4px; transition: all 0.2s; }
+.btn-primary { background: var(--ink); color: var(--cream); }
+.btn-primary:hover { background: var(--accent); }
+.btn-ghost { border: 1px solid var(--border); color: var(--muted); }
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+section { padding: 7rem 6vw; max-width: 960px; margin: 0 auto; }
+.sec-label { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+.sec-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.15; margin-bottom: 0.8rem; }
+.sec-line { width: 40px; height: 1px; background: var(--border); margin-bottom: 3rem; }
+/* ABOUT */
+.about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4.5rem; align-items: start; }
+.about-text p { color: var(--muted); margin-bottom: 1rem; font-weight: 300; line-height: 1.9; font-size: 0.96rem; }
+.about-text strong { color: var(--ink); font-weight: 500; }
+.about-stats { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1.25rem; }
+.stat-cell { padding: 1.3rem; background: var(--card-bg); }
+.stat-cell:nth-child(2) { border-left: 1px solid var(--border); }
+.stat-cell:nth-child(3) { border-top: 1px solid var(--border); }
+.stat-cell:nth-child(4) { border-top: 1px solid var(--border); border-left: 1px solid var(--border); }
+.stat-num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--accent); display: block; line-height: 1; margin-bottom: 4px; }
+.stat-desc { font-size: 0.77rem; color: var(--muted); }
+.currently { border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem 1.4rem; background: var(--card-bg); font-size: 0.85rem; color: var(--muted); line-height: 1.8; }
+.currently strong { color: var(--accent); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 6px; font-weight: 500; }
+/* SKILLS */
+.skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.skill-group { border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem; background: var(--card-bg); }
+.sgt { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: block; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.skill-tag { font-size: 0.78rem; padding: 4px 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--cream); color: var(--muted); }
+/* PROJECTS */
+.project-card { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: start; border: 1px solid var(--border); border-radius: 8px; padding: 1.75rem 2rem; background: var(--card-bg); margin-bottom: 0.75rem; transition: background 0.2s, transform 0.2s; text-decoration: none; color: inherit; display: grid; }
+.project-card:hover { background: #ede9e0; transform: translateX(5px); }
+.project-num { font-family: 'DM Serif Display', serif; font-size: 0.82rem; color: var(--accent); opacity: 0.4; margin-bottom: 0.35rem; }
+.project-name { font-size: 1.05rem; font-weight: 500; margin-bottom: 0.4rem; }
+.project-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 0.75rem; }
+.project-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.project-tag { font-size: 0.7rem; padding: 3px 8px; border: 1px solid var(--border); border-radius: 3px; color: var(--muted); }
+.project-status { font-size: 0.7rem; padding: 4px 10px; border-radius: 99px; white-space: nowrap; align-self: start; }
+.s-building { background: #fef3e2; color: #8a5200; border: 1px solid #f5d18e; }
+.s-done { background: #e8f5ec; color: #1a6b3a; border: 1px solid #a3d9b4; }
+.s-idea { background: #f0eefb; color: #4a3d9a; border: 1px solid #c9c4f0; }
+/* LEETCODE */
+.lc-stats-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.lc-stat { flex: 1; min-width: 90px; border: 1px solid var(--border); border-radius: 8px; padding: 1.2rem; background: var(--card-bg); text-align: center; }
+.lc-stat-num { font-family: 'DM Serif Display', serif; font-size: 1.8rem; display: block; line-height: 1; margin-bottom: 4px; }
+.lc-stat-num.easy { color: var(--easy); } .lc-stat-num.medium { color: var(--medium); } .lc-stat-num.hard { color: var(--hard); } .lc-stat-num.total { color: var(--ink); }
+.lc-stat-label { font-size: 0.7rem; color: var(--muted); }
+.lc-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.lc-filter { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 13px; border: 1px solid var(--border); border-radius: 99px; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.lc-filter.active, .lc-filter:hover { background: var(--card-bg); color: var(--ink); border-color: rgba(26,25,22,0.25); }
+.lc-table-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+thead { background: var(--card-bg); }
+th { text-align: left; padding: 10px 14px; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+td { padding: 11px 14px; border-top: 1px solid var(--border); vertical-align: middle; }
+tr:hover td { background: #f7f5f0; }
+.diff-badge { display: inline-block; font-size: 0.68rem; padding: 2px 9px; border-radius: 99px; font-weight: 500; }
+.diff-easy { background: #d9f2e4; color: var(--easy); } .diff-medium { background: #fde8cc; color: var(--medium); } .diff-hard { background: #fad4d4; color: var(--hard); }
+.topic-chip { display: inline-block; font-size: 0.67rem; padding: 2px 7px; border: 1px solid var(--border); border-radius: 3px; color: var(--muted); margin: 1px; }
+/* CONTACT */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+.contact-text p { font-size: 0.96rem; color: var(--muted); font-weight: 300; line-height: 1.9; margin-bottom: 1rem; }
+.contact-links { display: flex; flex-direction: column; margin-top: 1.5rem; }
+.contact-link { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; font-size: 0.88rem; color: var(--muted); transition: color 0.2s; padding: 0.65rem 0; border-bottom: 1px solid var(--border); }
+.contact-link:hover { color: var(--accent); }
+.contact-link-label { flex: 1; }
+.contact-link-arrow { font-size: 0.7rem; opacity: 0.4; }
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.form-group input, .form-group textarea { font-family: 'DM Sans', sans-serif; font-size: 0.9rem; padding: 10px 14px; border: 1px solid var(--border); border-radius: 5px; background: var(--card-bg); color: var(--ink); transition: border-color 0.2s; resize: none; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: rgba(26,25,22,0.3); }
+.form-submit { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 11px 24px; border: none; border-radius: 4px; background: var(--ink); color: var(--cream); cursor: pointer; transition: background 0.2s; align-self: flex-start; }
+.form-submit:hover { background: var(--accent); }
+footer { border-top: 1px solid var(--border); padding: 2rem 6vw; display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: 0 auto; font-size: 0.78rem; color: var(--muted); }
+@media (max-width: 700px) {
+  .nav-links { display: none; }
+  .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  body { cursor: auto; } .cursor, .cursor-ring { display: none; }
+  .project-card { grid-template-columns: 1fr; }
+  th:nth-child(4), td:nth-child(4) { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<nav>
+  <a href="#hero" class="nav-logo" id="nav-name">Vidushi Singh</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#leetcode">LeetCode</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div id="hero">
+  <p class="hero-eyebrow" id="hero-role">Engineering student · 2nd semester</p>
+  <h1 class="hero-name" id="hero-name">Vidushi<br><em>Singh</em></h1>
+  <p class="hero-bio" id="hero-bio">Building things to figure out what I love.</p>
+  <div class="hero-chips">
+    <span class="chip">DSA learner</span>
+    <span class="chip">Curious by default</span>
+    <span class="chip">Weekend builder</span>
+    <span class="chip">Learning in public</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">See my work</a>
+    <a href="#contact" class="btn btn-ghost">Say hello</a>
+  </div>
+</div>
+
+<section id="about">
+  <p class="sec-label">Who I am</p>
+  <h2 class="sec-title">Just getting started,<br>honestly.</h2>
+  <div class="sec-line"></div>
+  <div class="about-grid">
+    <div class="about-text" id="about-text">
+      <p>Loading…</p>
+    </div>
+    <div>
+      <div class="about-stats">
+        <div class="stat-cell"><span class="stat-num" id="stat-lc">—</span><span class="stat-desc">LC problems solved</span></div>
+        <div class="stat-cell"><span class="stat-num">2nd</span><span class="stat-desc">Semester of engineering</span></div>
+        <div class="stat-cell"><span class="stat-num" id="stat-proj">—</span><span class="stat-desc">Projects attempted</span></div>
+        <div class="stat-cell"><span class="stat-num">∞</span><span class="stat-desc">Things left to learn</span></div>
+      </div>
+      <div class="currently"><strong>Currently</strong><span id="currently-text">Loading…</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <p class="sec-label">What I know</p>
+  <h2 class="sec-title">Skills &amp; tools</h2>
+  <div class="sec-line"></div>
+  <div class="skills-grid" id="skills-grid">
+    <div class="skill-group" style="opacity:0.4">Loading…</div>
+  </div>
+</section>
+
+<section id="projects">
+  <p class="sec-label">Things I've built</p>
+  <h2 class="sec-title">Projects</h2>
+  <div class="sec-line"></div>
+  <div id="projects-list"></div>
+</section>
+
+<section id="leetcode">
+  <p class="sec-label">DSA Progress</p>
+  <h2 class="sec-title">LeetCode log</h2>
+  <div class="sec-line"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+    <p style="font-size:0.95rem;color:var(--muted);font-weight:300;max-width:540px;line-height:1.8;">Started DSA recently. Stats sync live from my LeetCode account.</p>
+    <span id="lc-streak" style="font-size:0.82rem;color:var(--accent);"></span>
+  </div>
+  <div class="lc-stats-row">
+    <div class="lc-stat"><span class="lc-stat-num total" id="lc-total">—</span><span class="lc-stat-label">Total solved</span></div>
+    <div class="lc-stat"><span class="lc-stat-num easy" id="lc-easy">—</span><span class="lc-stat-label">Easy</span></div>
+    <div class="lc-stat"><span class="lc-stat-num medium" id="lc-medium">—</span><span class="lc-stat-label">Medium</span></div>
+    <div class="lc-stat"><span class="lc-stat-num hard" id="lc-hard">—</span><span class="lc-stat-label">Hard</span></div>
+  </div>
+  <div style="margin-bottom:2rem;">
+    <p style="font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">Recent accepted submissions</p>
+    <div id="lc-recent" style="border:1px solid var(--border);border-radius:8px;padding:0.5rem 1rem;background:var(--card-bg);"></div>
+  </div>
+  <div class="lc-filters">
+    <button class="lc-filter active" onclick="lcFilter('all',this)">All</button>
+    <button class="lc-filter" onclick="lcFilter('easy',this)">Easy</button>
+    <button class="lc-filter" onclick="lcFilter('medium',this)">Medium</button>
+    <button class="lc-filter" onclick="lcFilter('hard',this)">Hard</button>
+  </div>
+  <div class="lc-table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Problem</th><th>Difficulty</th><th>Topics</th><th>Status</th></tr></thead>
+      <tbody id="lc-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="contact">
+  <p class="sec-label">Say hello</p>
+  <h2 class="sec-title">Get in touch</h2>
+  <div class="sec-line"></div>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-text">
+        <p>I'm a student — no polished pitch yet, but happy to connect, chat about what I'm learning, or just meet people building things.</p>
+      </div>
+      <div class="contact-links" id="contact-links"></div>
+    </div>
+    <div>
+      <form class="contact-form" onsubmit="submitForm(event)">
+        <div class="form-group"><label>Your name</label><input type="text" id="f-name" placeholder="Ada Lovelace"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="f-email" placeholder="ada@example.com"></div>
+        <div class="form-group"><label>Message</label><textarea rows="4" id="f-msg" placeholder="Hey Vidushi…"></textarea></div>
+        <button type="submit" class="form-submit">Send message</button>
+        <p id="form-thanks" style="display:none;font-size:0.85rem;color:var(--easy);margin-top:0.5rem;">Thanks! I'll get back to you soon.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span id="footer-name">Vidushi Singh · 2025</span>
+  <span>Made from scratch &nbsp;✦&nbsp; updating as I grow</span>
+</footer>
+
+<script>
+// CURSOR
+const cur = document.getElementById('cursor'), ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+setInterval(()=>{ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; },16);
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ ring.style.transform='translate(-50%,-50%) scale(1.8)'; ring.style.opacity='0.2'; });
+  el.addEventListener('mouseleave',()=>{ ring.style.transform='translate(-50%,-50%) scale(1)'; ring.style.opacity='0.4'; });
+});
+
+const statusIcon = { solved:'✅', review:'🔄', todo:'⬜' };
+let allProblems = [], lcActiveFilter = 'all';
+
+async function loadAll() {
+  const [about, skills, projects, problems, lcLive] = await Promise.all([
+    fetch('/api/about').then(r=>r.json()),
+    fetch('/api/skills').then(r=>r.json()),
+    fetch('/api/projects').then(r=>r.json()),
+    fetch('/api/problems').then(r=>r.json()),
+    fetch('/api/lc/stats').then(r=>r.json()).catch(()=>null),
+  ]);
+  renderAbout(about);
+  renderSkills(skills);
+  renderProjects(projects);
+  allProblems = problems;
+  renderLC();
+  renderLiveStats(lcLive, projects.length);
+  renderContact(about);
+}
+
+function renderAbout(a) {
+  document.getElementById('nav-name').textContent = a.name;
+  document.getElementById('hero-name').innerHTML = a.name.split(' ')[0] + '<br><em>' + a.name.split(' ').slice(1).join(' ') + '</em>';
+  document.getElementById('hero-role').textContent = a.role;
+  document.getElementById('hero-bio').textContent = a.bio1;
+  document.getElementById('currently-text').textContent = a.currently;
+  document.getElementById('footer-name').textContent = a.name + ' · ' + new Date().getFullYear();
+  document.getElementById('about-text').innerHTML = [a.bio1, a.bio2, a.bio3, a.bio4]
+    .filter(Boolean).map(b => `<p>${b}</p>`).join('');
+}
+
+function renderSkills(skills) {
+  const groups = {};
+  skills.forEach(s => { if (!groups[s.category]) groups[s.category] = []; groups[s.category].push(s); });
+  document.getElementById('skills-grid').innerHTML = Object.entries(groups).map(([cat, items]) => `
+    <div class="skill-group">
+      <span class="sgt">${cat}</span>
+      <div class="skill-tags">${items.map(s => `<span class="skill-tag">${s.name}</span>`).join('')}</div>
+      ${items[0]?.note ? `<p style="margin-top:0.8rem;font-size:0.72rem;color:var(--accent);opacity:0.8;">↳ ${items[0].note}</p>` : ''}
+    </div>`).join('');
+}
+
+function renderProjects(projects) {
+  document.getElementById('projects-list').innerHTML = projects.map((p, i) => `
+    <div class="project-card" style="display:grid;grid-template-columns:1fr auto;">
+      <div>
+        <p class="project-num">0${i+1}</p>
+        <p class="project-name">${p.name}</p>
+        <p class="project-desc">${p.description}</p>
+        <div class="project-tags">${(p.tags||[]).map(t=>`<span class="project-tag">${t}</span>`).join('')}</div>
+      </div>
+      <span class="project-status s-${p.status}">${p.status}</span>
+    </div>`).join('');
+}
+
+function renderLiveStats(lc, projCount) {
+  if (lc && lc.solved) {
+    document.getElementById('lc-total').textContent  = lc.solved.total;
+    document.getElementById('lc-easy').textContent   = lc.solved.easy;
+    document.getElementById('lc-medium').textContent = lc.solved.medium;
+    document.getElementById('lc-hard').textContent   = lc.solved.hard;
+    document.getElementById('stat-lc').textContent   = lc.solved.total;
+    const streakEl = document.getElementById('lc-streak');
+    if (streakEl && lc.streak > 0) streakEl.textContent = '🔥 ' + lc.streak + ' day streak';
+    const recentEl = document.getElementById('lc-recent');
+    if (recentEl && lc.recentSubmissions && lc.recentSubmissions.length) {
+      recentEl.innerHTML = lc.recentSubmissions.slice(0,5).map(s =>
+        '<a href="' + s.url + '" target="_blank" style="display:block;font-size:0.82rem;color:var(--muted);text-decoration:none;padding:6px 0;border-bottom:1px solid var(--border);" onmouseover="this.style.color=\'var(--accent)\'" onmouseout="this.style.color=\'var(--muted)\'">' + s.title + ' ↗</a>'
+      ).join('');
+    }
+  } else {
+    fetch('/api/stats').then(r=>r.json()).then(s => {
+      document.getElementById('lc-total').textContent  = s.total;
+      document.getElementById('lc-easy').textContent   = s.easy;
+      document.getElementById('lc-medium').textContent = s.medium;
+      document.getElementById('lc-hard').textContent   = s.hard;
+      document.getElementById('stat-lc').textContent   = s.total;
+    });
+  }
+  document.getElementById('stat-proj').textContent = projCount;
+}
+
+function renderLC() {
+  let list = allProblems.filter(p => lcActiveFilter === 'all' || p.diff === lcActiveFilter);
+  list.sort((a,b) => a.num - b.num);
+  document.getElementById('lc-tbody').innerHTML = list.length
+    ? list.map(p => `<tr>
+        <td style="color:var(--muted);font-size:0.78rem;">${p.num||'—'}</td>
+        <td style="font-weight:500;">${p.name}</td>
+        <td><span class="diff-badge diff-${p.diff}">${p.diff}</span></td>
+        <td>${(p.topics||[]).map(t=>`<span class="topic-chip">${t}</span>`).join('')}</td>
+        <td>${statusIcon[p.status]||'⬜'}</td>
+      </tr>`).join('')
+    : `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted);font-style:italic;">No problems yet.</td></tr>`;
+}
+
+function lcFilter(f, el) {
+  lcActiveFilter = f;
+  document.querySelectorAll('.lc-filter').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderLC();
+}
+
+function renderContact(a) {
+  const links = [
+    { icon: '⌥', label: 'GitHub', href: a.github },
+    { icon: '◈', label: 'LinkedIn', href: a.linkedin },
+    { icon: '◎', label: 'LeetCode', href: a.leetcode },
+    { icon: '✉', label: a.email, href: 'mailto:' + a.email },
+  ];
+  document.getElementById('contact-links').innerHTML = links.map(l => `
+    <a href="${l.href}" target="_blank" class="contact-link">
+      <span style="width:18px;text-align:center;">${l.icon}</span>
+      <span class="contact-link-label">${l.label}</span>
+      <span class="contact-link-arrow">↗</span>
+    </a>`).join('');
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  const name = document.getElementById('f-name').value.trim();
+  const msg = document.getElementById('f-msg').value.trim();
+  if (!name || !msg) { alert('Please fill in your name and message.'); return; }
+  ['f-name','f-email','f-msg'].forEach(id => document.getElementById(id).value = '');
+  const t = document.getElementById('form-thanks');
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 4000);
+}
+
+loadAll();
+</script>
+</body>
+</html>

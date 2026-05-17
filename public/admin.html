@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Vidushi Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #faf9f6; --ink: #1a1916; --muted: #7a7770;
+  --accent: #b5601a; --border: rgba(26,25,22,0.12); --card-bg: #f3f1ec;
+  --easy: #2d7a4e; --medium: #b5601a; --hard: #9b2525;
+}
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); font-size: 15px; line-height: 1.6; }
+
+/* LOGIN */
+#login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+.login-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; width: 340px; text-align: center; }
+.login-box h1 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 0.4rem; }
+.login-box p { font-size: 0.85rem; color: var(--muted); margin-bottom: 2rem; }
+.login-box input { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--cream); color: var(--ink); margin-bottom: 1rem; }
+.login-box input:focus { outline: none; border-color: rgba(26,25,22,0.3); }
+.login-btn { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 10px; border: none; border-radius: 6px; background: var(--ink); color: var(--cream); cursor: pointer; transition: background 0.2s; }
+.login-btn:hover { background: var(--accent); }
+.login-error { color: var(--hard); font-size: 0.82rem; margin-top: 0.75rem; display: none; }
+
+/* APP */
+#app { display: none; min-height: 100vh; }
+header { padding: 1rem 2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(250,249,246,0.95); position: sticky; top: 0; z-index: 50; }
+.header-left { display: flex; align-items: center; gap: 1rem; }
+.header-logo { font-family: 'DM Serif Display', serif; font-size: 1rem; }
+.header-badge { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent); color: white; padding: 3px 8px; border-radius: 3px; }
+.header-right { display: flex; align-items: center; gap: 1rem; }
+.view-site { font-size: 0.78rem; color: var(--muted); text-decoration: none; }
+.view-site:hover { color: var(--ink); }
+.logout-btn { font-size: 0.78rem; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; cursor: pointer; }
+.logout-btn:hover { color: var(--hard); border-color: var(--hard); }
+
+/* LAYOUT */
+.layout { display: grid; grid-template-columns: 200px 1fr; min-height: calc(100vh - 57px); }
+.sidebar { border-right: 1px solid var(--border); padding: 1.5rem 0; }
+.sidebar-item { display: block; width: 100%; text-align: left; padding: 0.6rem 1.5rem; font-size: 0.85rem; color: var(--muted); background: none; border: none; cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; }
+.sidebar-item:hover { color: var(--ink); background: var(--card-bg); }
+.sidebar-item.active { color: var(--accent); border-left-color: var(--accent); background: var(--card-bg); font-weight: 500; }
+.content { padding: 2rem 2.5rem; max-width: 820px; }
+.panel { display: none; }
+.panel.active { display: block; }
+.panel-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 0.4rem; }
+.panel-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 2rem; }
+
+/* FORM ELEMENTS */
+.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 1rem; }
+.field label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.field input, .field select, .field textarea {
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; padding: 8px 12px;
+  border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--ink);
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: rgba(26,25,22,0.3); }
+.field textarea { resize: vertical; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.save-btn { font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 9px 20px; border: none; border-radius: 5px; background: var(--ink); color: var(--cream); cursor: pointer; transition: background 0.2s; }
+.save-btn:hover { background: var(--accent); }
+.save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* CARDS */
+.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.card-info { flex: 1; }
+.card-name { font-weight: 500; font-size: 0.95rem; margin-bottom: 2px; }
+.card-meta { font-size: 0.78rem; color: var(--muted); }
+.card-actions { display: flex; gap: 6px; }
+.card-btn { font-size: 0.75rem; padding: 4px 10px; border: 1px solid var(--border); border-radius: 4px; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
+.card-btn:hover { color: var(--ink); border-color: rgba(26,25,22,0.25); }
+.card-btn.danger:hover { color: var(--hard); border-color: var(--hard); }
+
+/* TAGS */
+.mini-badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 99px; font-weight: 500; margin-left: 6px; }
+.badge-easy { background: #d9f2e4; color: var(--easy); }
+.badge-medium { background: #fde8cc; color: var(--medium); }
+.badge-hard { background: #fad4d4; color: var(--hard); }
+.badge-done { background: #e8f5ec; color: #1a6b3a; }
+.badge-building { background: #fef3e2; color: #8a5200; }
+.badge-idea { background: #f0eefb; color: #4a3d9a; }
+
+/* ADD FORM inline */
+.add-form { background: var(--cream); border: 1px dashed var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem; }
+.add-form-title { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+.add-form-grid { display: grid; grid-template-columns: 70px 1fr 110px 110px; gap: 8px; align-items: end; margin-bottom: 8px; }
+.add-form-grid2 { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: end; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--ink); color: var(--cream); font-size: 0.85rem; padding: 10px 20px; border-radius: 6px; z-index: 999; transition: transform 0.3s; pointer-events: none; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* DIVIDER */
+.section-divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Admin</h1>
+    <p>Vidushi's portfolio dashboard</p>
+    <input type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">Sign in</button>
+    <p class="login-error" id="login-error">Wrong password. Try again.</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="header-left">
+      <span class="header-logo">Portfolio Admin</span>
+      <span class="header-badge">Dashboard</span>
+    </div>
+    <div class="header-right">
+      <a href="/" target="_blank" class="view-site">View site ↗</a>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar">
+      <button class="sidebar-item active" onclick="showPanel('about', this)">About &amp; Bio</button>
+      <button class="sidebar-item" onclick="showPanel('skills', this)">Skills</button>
+      <button class="sidebar-item" onclick="showPanel('projects', this)">Projects</button>
+      <button class="sidebar-item" onclick="showPanel('leetcode', this)">LeetCode</button>
+    </nav>
+
+    <div class="content">
+
+      <!-- ABOUT PANEL -->
+      <div class="panel active" id="panel-about">
+        <h2 class="panel-title">About &amp; Bio</h2>
+        <p class="panel-sub">This updates your name, role, bio paragraphs, and contact links on the public site.</p>
+        <div class="field-row">
+          <div class="field"><label>Full name</label><input id="a-name" type="text"></div>
+          <div class="field"><label>Role / tagline</label><input id="a-role" type="text"></div>
+        </div>
+        <div class="field"><label>Bio paragraph 1</label><textarea id="a-bio1" rows="2"></textarea></div>
+        <div class="field"><label>Bio paragraph 2</label><textarea id="a-bio2" rows="2"></textarea></div>
+        <div class="field"><label>Bio paragraph 3</label><textarea id="a-bio3" rows="2"></textarea></div>
+        <div class="field"><label>Bio paragraph 4</label><textarea id="a-bio4" rows="2"></textarea></div>
+        <div class="field"><label>Currently (shown in about card)</label><textarea id="a-currently" rows="2"></textarea></div>
+        <hr class="section-divider">
+        <div class="field-row">
+          <div class="field"><label>GitHub URL</label><input id="a-github" type="text"></div>
+          <div class="field"><label>LinkedIn URL</label><input id="a-linkedin" type="text"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>LeetCode URL</label><input id="a-leetcode" type="text"></div>
+          <div class="field"><label>Email</label><input id="a-email" type="text"></div>
+        </div>
+        <button class="save-btn" id="save-about-btn" onclick="saveAbout()">Save changes</button>
+      </div>
+
+      <!-- SKILLS PANEL -->
+      <div class="panel" id="panel-skills">
+        <h2 class="panel-title">Skills</h2>
+        <p class="panel-sub">Add or remove skills. Group them by category (e.g. Languages, DSA Topics, Tools).</p>
+        <div class="add-form">
+          <p class="add-form-title">Add a skill</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;">
+            <div class="field" style="margin:0"><label>Category</label><input id="sk-cat" type="text" placeholder="Languages"></div>
+            <div class="field" style="margin:0"><label>Skill name</label><input id="sk-name" type="text" placeholder="Python"></div>
+            <div class="field" style="margin:0"><label>Note (optional)</label><input id="sk-note" type="text" placeholder="currently learning…"></div>
+            <button class="save-btn" onclick="addSkill()">Add</button>
+          </div>
+        </div>
+        <div id="skills-list"></div>
+      </div>
+
+      <!-- PROJECTS PANEL -->
+      <div class="panel" id="panel-projects">
+        <h2 class="panel-title">Projects</h2>
+        <p class="panel-sub">Add, edit, or remove projects. They appear on the public portfolio in order.</p>
+        <div class="add-form">
+          <p class="add-form-title">Add a project</p>
+          <div class="add-form-grid">
+            <div class="field" style="margin:0"><label>Order #</label><input id="p-num" type="number" placeholder="1"></div>
+            <div class="field" style="margin:0"><label>Project name</label><input id="p-name" type="text" placeholder="My App"></div>
+            <div class="field" style="margin:0"><label>Status</label>
+              <select id="p-status"><option value="building">Building</option><option value="done">Done</option><option value="idea">Idea</option></select>
+            </div>
+            <div class="field" style="margin:0"><label>Link (optional)</label><input id="p-link" type="text" placeholder="https://…"></div>
+          </div>
+          <div class="add-form-grid2">
+            <div class="field" style="margin:0"><label>Description</label><input id="p-desc" type="text" placeholder="What it does…"></div>
+            <div class="field" style="margin:0"><label>Tags (comma sep)</label><input id="p-tags" type="text" placeholder="HTML, CSS, JS"></div>
+            <button class="save-btn" onclick="addProject()">Add</button>
+          </div>
+        </div>
+        <div id="projects-list"></div>
+      </div>
+
+      <!-- LEETCODE PANEL -->
+      <div class="panel" id="panel-leetcode">
+        <h2 class="panel-title">LeetCode Problems</h2>
+        <p class="panel-sub">Log every problem you solve. Shows up on the public portfolio automatically.</p>
+        <div class="add-form">
+          <p class="add-form-title">Log a problem</p>
+          <div class="add-form-grid">
+            <div class="field" style="margin:0"><label>LC #</label><input id="lc-num" type="number" placeholder="1"></div>
+            <div class="field" style="margin:0"><label>Problem name</label><input id="lc-name" type="text" placeholder="Two Sum"></div>
+            <div class="field" style="margin:0"><label>Difficulty</label>
+              <select id="lc-diff"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select>
+            </div>
+            <div class="field" style="margin:0"><label>Status</label>
+              <select id="lc-status"><option value="solved">Solved ✅</option><option value="review">Review 🔄</option><option value="todo">To-do ⬜</option></select>
+            </div>
+          </div>
+          <div class="add-form-grid2">
+            <div class="field" style="margin:0"><label>Topics (comma sep)</label><input id="lc-topics" type="text" placeholder="Array, Hash Map"></div>
+            <div class="field" style="margin:0"><label>Notes</label><input id="lc-notes" type="text" placeholder="Optional notes…"></div>
+            <button class="save-btn" onclick="addProblem()">Add</button>
+          </div>
+        </div>
+        <div id="lc-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let token = localStorage.getItem('admin_token') || '';
+
+// ── AUTH ──────────────────────────────────────────────────
+async function login() {
+  const pw = document.getElementById('pw-input').value;
+  const res = await fetch('/api/auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: pw })
+  });
+  const data = await res.json();
+  if (data.ok) {
+    token = data.token;
+    localStorage.setItem('admin_token', token);
+    showApp();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function logout() {
+  token = '';
+  localStorage.removeItem('admin_token');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pw-input').value = '';
+}
+
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'x-admin-token': token };
+}
+
+async function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  await loadAll();
+}
+
+// Auto-login if token saved
+if (token) {
+  fetch('/api/about', { headers: { 'x-admin-token': token } })
+    .then(r => r.ok ? showApp() : null).catch(() => {});
+}
+
+// ── PANELS ────────────────────────────────────────────────
+function showPanel(name, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── LOAD ALL ──────────────────────────────────────────────
+async function loadAll() {
+  const [about, skills, projects, problems] = await Promise.all([
+    fetch('/api/about').then(r=>r.json()),
+    fetch('/api/skills').then(r=>r.json()),
+    fetch('/api/projects').then(r=>r.json()),
+    fetch('/api/problems').then(r=>r.json()),
+  ]);
+  populateAbout(about);
+  renderSkills(skills);
+  renderProjects(projects);
+  renderProblems(problems);
+}
+
+// ── ABOUT ─────────────────────────────────────────────────
+function populateAbout(a) {
+  ['name','role','bio1','bio2','bio3','bio4','currently','github','linkedin','leetcode','email']
+    .forEach(k => { const el = document.getElementById('a-' + k); if (el) el.value = a[k] || ''; });
+}
+
+async function saveAbout() {
+  const btn = document.getElementById('save-about-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  const body = {};
+  ['name','role','bio1','bio2','bio3','bio4','currently','github','linkedin','leetcode','email']
+    .forEach(k => { body[k] = document.getElementById('a-' + k).value; });
+  await fetch('/api/about', { method: 'PATCH', headers: authHeaders(), body: JSON.stringify(body) });
+  btn.disabled = false; btn.textContent = 'Save changes';
+  showToast('About saved ✅');
+}
+
+// ── SKILLS ────────────────────────────────────────────────
+let skillsData = [];
+
+function renderSkills(skills) {
+  skillsData = skills;
+  const groups = {};
+  skills.forEach(s => { if (!groups[s.category]) groups[s.category] = []; groups[s.category].push(s); });
+  document.getElementById('skills-list').innerHTML = Object.entries(groups).map(([cat, items]) => `
+    <div style="margin-bottom:1.5rem;">
+      <p style="font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;">${cat}</p>
+      ${items.map(s => `
+        <div class="card">
+          <div class="card-info">
+            <p class="card-name">${s.name}</p>
+            ${s.note ? `<p class="card-meta">${s.note}</p>` : ''}
+          </div>
+          <div class="card-actions">
+            <button class="card-btn danger" onclick="deleteSkill(${s.id})">Delete</button>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+async function addSkill() {
+  const cat  = document.getElementById('sk-cat').value.trim();
+  const name = document.getElementById('sk-name').value.trim();
+  const note = document.getElementById('sk-note').value.trim();
+  if (!cat || !name) { alert('Category and name are required.'); return; }
+  const res = await fetch('/api/skills', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ category: cat, name, note }) });
+  const s = await res.json();
+  skillsData.push(s);
+  renderSkills(skillsData);
+  document.getElementById('sk-cat').value = '';
+  document.getElementById('sk-name').value = '';
+  document.getElementById('sk-note').value = '';
+  showToast('Skill added ✅');
+}
+
+async function deleteSkill(id) {
+  if (!confirm('Delete this skill?')) return;
+  await fetch('/api/skills/' + id, { method: 'DELETE', headers: authHeaders() });
+  skillsData = skillsData.filter(s => s.id !== id);
+  renderSkills(skillsData);
+  showToast('Skill deleted');
+}
+
+// ── PROJECTS ──────────────────────────────────────────────
+let projectsData = [];
+
+function renderProjects(projects) {
+  projectsData = projects;
+  document.getElementById('projects-list').innerHTML = projects.map(p => `
+    <div class="card">
+      <div class="card-info">
+        <p class="card-name">${p.name} <span class="mini-badge badge-${p.status}">${p.status}</span></p>
+        <p class="card-meta">${p.description || '—'}</p>
+        <p class="card-meta" style="margin-top:4px;">${(p.tags||[]).join(', ') || '—'}</p>
+      </div>
+      <div class="card-actions">
+        <button class="card-btn" onclick="editProject(${p.id})">Edit</button>
+        <button class="card-btn danger" onclick="deleteProject(${p.id})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addProject() {
+  const num  = parseInt(document.getElementById('p-num').value) || 0;
+  const name = document.getElementById('p-name').value.trim();
+  const desc = document.getElementById('p-desc').value.trim();
+  const tags = document.getElementById('p-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const status = document.getElementById('p-status').value;
+  const link = document.getElementById('p-link').value.trim();
+  if (!name) { alert('Project name is required.'); return; }
+  const res = await fetch('/api/projects', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ num, name, description: desc, tags, status, link }) });
+  const p = await res.json();
+  projectsData.push(p);
+  renderProjects(projectsData);
+  ['p-num','p-name','p-desc','p-tags','p-link'].forEach(id => document.getElementById(id).value = '');
+  showToast('Project added ✅');
+}
+
+function editProject(id) {
+  const p = projectsData.find(x => x.id === id);
+  if (!p) return;
+  const name = prompt('Project name:', p.name);
+  if (name === null) return;
+  const desc = prompt('Description:', p.description);
+  const tags = prompt('Tags (comma sep):', (p.tags||[]).join(', '));
+  const status = prompt('Status (done / building / idea):', p.status);
+  const link = prompt('Link:', p.link || '');
+  fetch('/api/projects/' + id, {
+    method: 'PATCH', headers: authHeaders(),
+    body: JSON.stringify({ name: name||p.name, description: desc??p.description, tags: tags ? tags.split(',').map(t=>t.trim()).filter(Boolean) : p.tags, status: status||p.status, link: link??p.link })
+  }).then(r=>r.json()).then(updated => {
+    projectsData = projectsData.map(x => x.id === id ? updated : x);
+    renderProjects(projectsData);
+    showToast('Project updated ✅');
+  });
+}
+
+async function deleteProject(id) {
+  if (!confirm('Delete this project?')) return;
+  await fetch('/api/projects/' + id, { method: 'DELETE', headers: authHeaders() });
+  projectsData = projectsData.filter(x => x.id !== id);
+  renderProjects(projectsData);
+  showToast('Project deleted');
+}
+
+// ── PROBLEMS ──────────────────────────────────────────────
+let problemsData = [];
+
+function renderProblems(problems) {
+  problemsData = problems;
+  const statusIcon = { solved:'✅', review:'🔄', todo:'⬜' };
+  document.getElementById('lc-list').innerHTML = problems.sort((a,b)=>a.num-b.num).map(p => `
+    <div class="card">
+      <div class="card-info">
+        <p class="card-name">${p.num ? '#'+p.num+' · ' : ''}${p.name}
+          <span class="mini-badge badge-${p.diff}">${p.diff}</span>
+          <span style="margin-left:4px;">${statusIcon[p.status]||''}</span>
+        </p>
+        <p class="card-meta">${(p.topics||[]).join(', ') || '—'}${p.notes ? ' · ' + p.notes : ''}</p>
+      </div>
+      <div class="card-actions">
+        <button class="card-btn" onclick="cycleProblem(${p.id})">Cycle status</button>
+        <button class="card-btn danger" onclick="deleteProblem(${p.id})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addProblem() {
+  const num    = parseInt(document.getElementById('lc-num').value) || 0;
+  const name   = document.getElementById('lc-name').value.trim();
+  const diff   = document.getElementById('lc-diff').value;
+  const status = document.getElementById('lc-status').value;
+  const topics = document.getElementById('lc-topics').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const notes  = document.getElementById('lc-notes').value.trim();
+  if (!name) { alert('Problem name required.'); return; }
+  const res = await fetch('/api/problems', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ num, name, diff, topics, status, notes }) });
+  const p = await res.json();
+  problemsData.push(p);
+  renderProblems(problemsData);
+  ['lc-num','lc-name','lc-topics','lc-notes'].forEach(id => document.getElementById(id).value = '');
+  showToast('Problem logged ✅');
+}
+
+async function cycleProblem(id) {
+  const p = problemsData.find(x => x.id === id);
+  if (!p) return;
+  const next = { solved:'review', review:'todo', todo:'solved' }[p.status] || 'solved';
+  const res = await fetch('/api/problems/' + id, { method: 'PATCH', headers: authHeaders(), body: JSON.stringify({ status: next }) });
+  const updated = await res.json();
+  problemsData = problemsData.map(x => x.id === id ? updated : x);
+  renderProblems(problemsData);
+  showToast('Status updated');
+}
+
+async function deleteProblem(id) {
+  if (!confirm('Delete this problem?')) return;
+  await fetch('/api/problems/' + id, { method: 'DELETE', headers: authHeaders() });
+  problemsData = problemsData.filter(x => x.id !== id);
+  renderProblems(problemsData);
+  showToast('Problem deleted');
+}
+
+// ── TOAST ────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Enter to login
+document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+</script>
+</body>
+</html>
